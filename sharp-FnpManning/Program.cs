@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using static LaYumba.Functional.F;
+using static System.Console;
 using Unit = System.ValueTuple;
 
 namespace sharp_FnpManning
@@ -16,8 +18,29 @@ namespace sharp_FnpManning
                 .Format(shoppingList)
                 .ForEach(Console.WriteLine);
 
-            Console.WriteLine($"Age is {CalculateRiskProfile(new Age(119), Gender.Female)}");
+            WriteLine($"Age is {CalculateRiskProfile(new Age(119), Gender.Female)}");
+
+            Option<string> _ = None;
+            Option<string> john = Some("John");
+
+            WriteLine(greet(None));
+            WriteLine(greet(Some("Vitax")));
+
+            WriteLine(GreetingFor(new Subscriber { Email = "some@dot.com", Name = "vITAX" }));
         }
+
+        public static string GreetingFor(Subscriber subscriber) =>
+            subscriber.Name.Match(
+                None: () => $"Dear subscriber...",
+                Some: name => $"Dear {name.TrimStart().ToUpper()[0]}{name.TrimStart().Substring(1).ToLower()}"
+            );
+
+        public static string greet(Option<string> greetee) =>
+            greetee.Match(
+                None: () => "Sorry who?",
+                Some: name => $"Hello, {name}"
+            );
+
         // dishonest fn transformed to a honest fn
         //public static Risk CalculateRiskProfile(int age)
         //{
@@ -41,7 +64,14 @@ namespace sharp_FnpManning
         {
             throw new NotImplementedException();
         }
+
         //----------------------------------------
+    }
+
+    public class Subscriber
+    {
+        public Option<string> Name { get; set; }
+        public string Email { get; set; }
     }
 
     internal enum Gender
@@ -65,14 +95,14 @@ namespace sharp_FnpManning
 
         public Age(int value)
         {
-            if (!IsValid(value)) throw new ArgumentException($"{value} is not a valid age.");
+            if (!IsValid(value))
+                throw new ArgumentException($"{value} is not a valid age.");
             Value = value;
         }
 
         private static bool IsValid(int value) =>
             0 < value && value < 120;
     }
-
 
 
     public sealed class BicFormatValidator : IValidator<MakeTransfer>
@@ -98,6 +128,5 @@ namespace sharp_FnpManning
 
     public abstract class Command
     {
-
     }
 }
