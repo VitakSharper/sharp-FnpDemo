@@ -1,6 +1,7 @@
 ﻿using LaYumba.Functional;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using static LaYumba.Functional.F;
 using static System.Console;
@@ -26,7 +27,34 @@ namespace sharp_FnpManning
             WriteLine(greet(None));
             WriteLine(greet(Some("Vitax")));
 
-            WriteLine(GreetingFor(new Subscriber { Email = "some@dot.com", Name = "vITAX" }));
+            WriteLine(GreetingFor(new Subscriber { Email = "some@dot.com", Name = "vITAX" }) + "\n");
+            WriteLine($"Parse: {Parse("10")}");
+
+            try
+            {
+                var empty = new NameValueCollection();
+                var green = empty.Lookup("green");
+                WriteLine($"green!: {green}");
+
+                var alsoEmpty = new Dictionary<string, string>();
+                var blue = alsoEmpty.Lookup("blue");
+                WriteLine($"blue!: {blue}");
+
+            }
+            catch (Exception e)
+            {
+
+                WriteLine(e.GetType().Name);
+            }
+        }
+
+
+
+        public static Option<int> Parse(string str)
+        {
+            return int.TryParse(str, out var result)
+                ? Some(result)
+                : None;
         }
 
         public static string GreetingFor(Subscriber subscriber) =>
