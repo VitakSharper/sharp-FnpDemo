@@ -1,7 +1,7 @@
 ﻿using LaYumba.Functional;
-using LaYumba.Functional.Option;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using static LaYumba.Functional.F;
 
 namespace sharp_FnpManning
 {
