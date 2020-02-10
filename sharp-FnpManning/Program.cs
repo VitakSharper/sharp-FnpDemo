@@ -19,13 +19,19 @@ namespace sharp_FnpManning
                 .Format(shoppingList)
                 .ForEach(Console.WriteLine);
 
-            WriteLine($"Age is {CalculateRiskProfile(new Age(119), Gender.Female)}");
+            //var age = Age.Of(100).Match<int>(
+            //    None:()=>-1,
+            //    Some:value=>value.
+            //    );
+
+            //Console.WriteLine($"Option age: {age}\n");
+            //WriteLine($"Age is {CalculateRiskProfile(age, Gender.Female)}");
 
             Option<string> _ = None;
             Option<string> john = Some("John");
 
-            WriteLine(greet(None));
-            WriteLine(greet(Some("Vitax")));
+            WriteLine(Greet(None));
+            WriteLine(Greet(Some("Vitax")));
 
             WriteLine(GreetingFor(new Subscriber { Email = "some@dot.com", Name = "vITAX" }) + "\n");
             WriteLine($"Parse: {Parse("10")}");
@@ -46,7 +52,16 @@ namespace sharp_FnpManning
 
                 WriteLine(e.GetType().Name);
             }
+
+            new List<int>().Lookup2(IsOdd);
+
+            var email = Email.Create("my@dot.com");
+            Console.WriteLine($"Email: {email}");
+
         }
+
+        public static bool IsOdd(int i) => i % 2 == 1;
+
 
 
 
@@ -63,7 +78,7 @@ namespace sharp_FnpManning
                 Some: name => $"Dear {name.TrimStart().ToUpper()[0]}{name.TrimStart().Substring(1).ToLower()}"
             );
 
-        public static string greet(Option<string> greetee) =>
+        public static string Greet(Option<string> greetee) =>
             greetee.Match(
                 None: () => "Sorry who?",
                 Some: name => $"Hello, {name}"
@@ -113,23 +128,6 @@ namespace sharp_FnpManning
         Low,
         Medium,
         High
-    }
-
-    public class Age
-    {
-        private int Value { get; }
-        public static bool operator <(Age l, int r) => l.Value < new Age(r).Value;
-        public static bool operator >(Age l, int r) => l.Value > new Age(r).Value;
-
-        public Age(int value)
-        {
-            if (!IsValid(value))
-                throw new ArgumentException($"{value} is not a valid age.");
-            Value = value;
-        }
-
-        private static bool IsValid(int value) =>
-            0 < value && value < 120;
     }
 
 
