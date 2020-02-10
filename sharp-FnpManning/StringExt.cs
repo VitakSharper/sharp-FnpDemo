@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using static LaYumba.Functional.F;
+using Enum = System.Enum;
 
 namespace sharp_FnpManning
 {
@@ -20,7 +21,7 @@ namespace sharp_FnpManning
                 ? Some(value) : None;
 
         public static Option<T> Parse2<T>(this string s) where T : struct =>
-            System.Enum.TryParse(s, out T t) ? Some(t) : None;
+            Enum.TryParse(s, out T t) ? Some(t) : None;
 
         // Lookup :IEnumerable<T> -> (T->bool) -> Option<T>
         public static Option<T> Lookup2<T>(this IEnumerable<T> ts, Func<T, bool> predicate)
@@ -33,5 +34,9 @@ namespace sharp_FnpManning
             return None;
         }
 
+        public static IEnumerable<R> Map2<T, R>(this IEnumerable<T> ts, Func<T, R> f)
+        {
+            foreach (T t in ts) yield return f(t);
+        }
     }
 }

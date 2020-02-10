@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Text.RegularExpressions;
 using static LaYumba.Functional.F;
 using static System.Console;
@@ -19,12 +20,12 @@ namespace sharp_FnpManning
                 .Format(shoppingList)
                 .ForEach(Console.WriteLine);
 
-            //var age = Age.Of(100).Match<int>(
-            //    None:()=>-1,
-            //    Some:value=>value.
-            //    );
+            var age = Age.Of(100).Match(
+                () => $"-1",
+                 value => $"{value}"
+                );
 
-            //Console.WriteLine($"Option age: {age}\n");
+            Console.WriteLine($"Option age: {age}\n");
             //WriteLine($"Age is {CalculateRiskProfile(age, Gender.Female)}");
 
             Option<string> _ = None;
@@ -56,14 +57,17 @@ namespace sharp_FnpManning
             new List<int>().Lookup2(IsOdd);
 
             var email = Email.Create("my@dot.com");
-            Console.WriteLine($"Email: {email}");
+            Console.WriteLine(email.Match(() => $"Mail is not valid format.", email1 => $"Mails is {email1}"));
+
+            System.Func<int, int> f = x => x * 3;
+            Enumerable.Range(1, 9).Map2(f);
 
         }
 
         public static bool IsOdd(int i) => i % 2 == 1;
 
 
-
+        
 
         public static Option<int> Parse(string str)
         {
