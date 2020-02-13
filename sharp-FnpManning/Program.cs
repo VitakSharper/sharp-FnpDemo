@@ -22,11 +22,13 @@ namespace sharp_FnpManning
 
             var age = Age.Of(100).Match(
                 () => $"-1",
-                 value => $"{value}"
-                );
+                value => $"{value}"
+            );
 
             Console.WriteLine($"Option age: {age}\n");
             //WriteLine($"Age is {CalculateRiskProfile(age, Gender.Female)}");
+
+
 
             Option<string> _ = None;
             Option<string> john = Some("John");
@@ -46,11 +48,9 @@ namespace sharp_FnpManning
                 var alsoEmpty = new Dictionary<string, string>();
                 var blue = alsoEmpty.Lookup("blue");
                 WriteLine($"blue!: {blue}");
-
             }
             catch (Exception e)
             {
-
                 WriteLine(e.GetType().Name);
             }
 
@@ -59,15 +59,18 @@ namespace sharp_FnpManning
             var email = Email.Create("my@dot.com");
             Console.WriteLine(email.Match(() => $"Mail is not valid format.", email1 => $"Mails is {email1}"));
 
-            System.Func<int, int> f = x => x * 3;
-            Enumerable.Range(1, 9).Map2(f);
+            // Map can be defined in terms of select
+            Func<int, int> f = x => x * 3;
+            Enumerable.Range(1, 9).Map2(f).ForEach(WriteLine);
 
+            RiskOf(new Subject {Age = new Option<Age>(), Gender = new Option<Gender>()});
         }
+
+        public static Option<Risk> RiskOf(Subject subject) =>
+            subject.Age.Map(CalculateRiskProfile2);
 
         public static bool IsOdd(int i) => i % 2 == 1;
 
-
-        
 
         public static Option<int> Parse(string str)
         {
@@ -103,6 +106,9 @@ namespace sharp_FnpManning
             return (age < threshold) ? Risk.Low : Risk.Medium;
         }
 
+        public static Risk CalculateRiskProfile2(Age age) =>
+            (age < 60) ? Risk.Low : Risk.Medium;
+
         //------------------------------------------------
         public static void Time(string op, Action act) =>
             Time<Unit>(op, act.ToFunc());
@@ -115,13 +121,19 @@ namespace sharp_FnpManning
         //----------------------------------------
     }
 
+    public class Subject
+    {
+        public Option<Age> Age { get; set; }
+        public Option<Gender> Gender { get; set; }
+    }
+
     public class Subscriber
     {
         public Option<string> Name { get; set; }
         public string Email { get; set; }
     }
 
-    internal enum Gender
+    public enum Gender
     {
         Female,
         Male
