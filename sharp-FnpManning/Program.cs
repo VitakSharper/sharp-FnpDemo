@@ -61,9 +61,12 @@ namespace sharp_FnpManning
 
             // Map can be defined in terms of select
             Func<int, int> f = x => x * 3;
-            Enumerable.Range(1, 9).Map2(f).ForEach(WriteLine);
+            Enumerable.Range(1, 9).Map2(f).ForEach(Write);
+            Enumerable.Range(1, 9).ForEach2(Write);
 
-            RiskOf(new Subject {Age = new Option<Age>(), Gender = new Option<Gender>()});
+            //RiskOf(new Subject {Age = new Option<Age>(), Gender = new Option<Gender>()});
+
+
         }
 
         public static Option<Risk> RiskOf(Subject subject) =>
