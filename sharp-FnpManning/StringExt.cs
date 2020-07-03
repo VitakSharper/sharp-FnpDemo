@@ -46,6 +46,11 @@ namespace sharp_FnpManning
             ts.Map2(action.ToFunc()).ToImmutableList();
 
         public static Option<Unit> ForEach<T>(this Option<T> opt, Action<T> action) =>
-            Map(opt, action.ToFunc());
+            Map2(opt, action.ToFunc());
+
+        private static Option<ValueTuple> Map2<T>(Option<T> opt, Func<T, ValueTuple> toFunc)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
